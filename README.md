@@ -7,7 +7,7 @@ What it does
 - Built for accessibility and low cognitive load
 
 ## Credits
-This app is powered by the [MWUI Framework]([url](https://github.com/endrocryne/MWUI-framework)), a flexible, customizable, framework for developing web apps. By default, StudySkills fetches the libraries from the MWUI cloud service. If the cloud service is not available, it will fallback to a locally hosted version.
+This app is powered by the [MWUI Framework](https://github.com/endrocryne/MWUI-framework), a flexible, customizable, framework for developing web apps. By default, StudySkills fetches the libraries from the MWUI cloud service. If the cloud service is not available, it will fallback to a locally hosted version.
 
 ## Instructions
 This is a standalone web application that runs directly in your browser. No installation is required.
