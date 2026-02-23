@@ -371,10 +371,54 @@
             .toast { min-width: 250px; }
             .shortcuts-content { width: 95%; padding: 20px; }
         }
+        .skip {
+            position: absolute;
+            left: 10px;
+            top: -48px;
+            z-index: 20000;
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 10px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .skip:focus {
+            top: 10px;
+        }
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+        .tab-content[hidden] {
+            display: none !important;
+        }
+        .tab-link[aria-selected="true"] {
+            font-weight: 700;
+        }
+        :focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
     </style>
 </head>
 <body class="material3" data-theme="light">
-    <div class="header">
+    <a class="skip" href="#main">Skip to main content</a>
+    <header class="header" role="banner">
         <div class="title">
             <i class="material-icons" style="vertical-align: bottom;">school</i> StudySkills AI
             <span id="a1" class="streak-badge hidden">
@@ -397,59 +441,63 @@
             </button>
             <button id="b5" aria-label="Open Settings">⚙️ Settings</button>
         </div>
-    </div>
+    </header>
     
     <div id="c1" class="error-banner hidden">
         <strong>Setup Required:</strong> Please go to Settings and enter your Gemini API Key to enable AI features.
     </div>
     
-    <div class="tabs" role="tablist">
-        <button class="tab-link active" onclick="t1(event, 'tutor')" role="tab" data-shortcut="1">
+    <nav class="tabs" role="tablist" aria-label="Primary sections">
+        <button id="tb1" class="tab-link active" onclick="t1(event, 'tutor')" role="tab" data-shortcut="1" data-tab="tutor" aria-controls="tutor" aria-selected="true" tabindex="0">
             <i class="material-icons">chat</i> AI Tutor
         </button>
-        <button class="tab-link" onclick="t1(event, 'live')" role="tab" data-shortcut="2">
+        <button id="tb2" class="tab-link" onclick="t1(event, 'live')" role="tab" data-shortcut="2" data-tab="live" aria-controls="live" aria-selected="false" tabindex="-1">
             <i class="material-icons">mic</i> Live Tutor
         </button>
-        <button class="tab-link" onclick="t1(event, 'notebook')" role="tab" data-shortcut="3">
+        <button id="tb3" class="tab-link" onclick="t1(event, 'notebook')" role="tab" data-shortcut="3" data-tab="notebook" aria-controls="notebook" aria-selected="false" tabindex="-1">
             <i class="material-icons">book</i> Notebook
         </button>
-        <button class="tab-link" onclick="t1(event, 'flashcards')" role="tab" data-shortcut="4">
+        <button id="tb4" class="tab-link" onclick="t1(event, 'flashcards')" role="tab" data-shortcut="4" data-tab="flashcards" aria-controls="flashcards" aria-selected="false" tabindex="-1">
             <i class="material-icons">style</i> Practice
         </button>
-        <button class="tab-link" onclick="t1(event, 'visualize')" role="tab" data-shortcut="5">
+        <button id="tb5" class="tab-link" onclick="t1(event, 'visualize')" role="tab" data-shortcut="5" data-tab="visualize" aria-controls="visualize" aria-selected="false" tabindex="-1">
             <i class="material-icons">draw</i> Visualize
         </button>
-        <button class="tab-link" onclick="t1(event, 'converter')" role="tab" data-shortcut="6">
+        <button id="tb6" class="tab-link" onclick="t1(event, 'converter')" role="tab" data-shortcut="6" data-tab="converter" aria-controls="converter" aria-selected="false" tabindex="-1">
             <i class="material-icons">record_voice_over</i> Convert
         </button>
-        <button class="tab-link" onclick="t1(event, 'access')" role="tab" data-shortcut="7">
+        <button id="tb7" class="tab-link" onclick="t1(event, 'access')" role="tab" data-shortcut="7" data-tab="access" aria-controls="access" aria-selected="false" tabindex="-1">
             <i class="material-icons">accessibility_new</i> Tools
         </button>
-    </div>
+    </nav>
+    <main id="main" tabindex="-1">
     
-    <div id="tutor" class="tab-content" style="display: block;" role="tabpanel">
+    <div id="tutor" class="tab-content" style="display: block;" role="tabpanel" aria-labelledby="tb1" tabindex="0">
         <div class="card" style="height: 100%; padding: 0;">
             <div class="search-container" style="padding: 10px; background: rgba(0,0,0,0.02);">
+                <label class="sr-only" for="d1">Search chat history</label>
                 <input type="text" id="d1" class="search-input" placeholder="Search chat history...">
                 <i class="material-icons search-icon">search</i>
             </div>
             <div class="chat-container">
-                <div id="d2" class="chat-history">
+                <div id="d2" class="chat-history" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Tutor conversation" tabindex="0">
                     <div class="chat-bubble ai-msg">
                         Hello! I am your AI Tutor. I can explain complex topics, answer questions, or just chat. You can type or speak to me.<br><br>
                         <strong>Tip:</strong> Press <code>Ctrl+M</code> for mic, <code>Ctrl+Enter</code> to send, or <code>?</code> for all shortcuts.
                     </div>
                 </div>
                 <div class="chat-input-area">
-                    <button class="btn-icon" id="d3" onclick="m1()" aria-label="Toggle Microphone" title="Ctrl+M">
+                    <button class="btn-icon" id="d3" onclick="m1()" aria-label="Toggle Microphone" title="Ctrl+M" aria-pressed="false">
                         <i class="material-icons">mic</i>
                     </button>
-                    <textarea id="d4" rows="1" style="flex:1; resize:none; padding:10px; border-radius:20px; border:1px solid #ccc;" placeholder="Ask me anything... (Ctrl+M for voice)"></textarea>
+                    <label class="sr-only" for="d4">Message to AI tutor</label>
+                    <textarea id="d4" rows="1" style="flex:1; resize:none; padding:10px; border-radius:20px; border:1px solid #ccc;" placeholder="Ask me anything... (Ctrl+M for voice)" aria-describedby="d7"></textarea>
                     <button class="btn-primary" onclick="m2()" id="d5" aria-label="Send Message" title="Ctrl+Enter">
                         <i class="material-icons">send</i>
                     </button>
                 </div>
             </div>
+            <div id="d7" class="sr-only">Press Control and Enter to send. Press Shift and Enter for a new line.</div>
             <div style="padding: 0.5rem; text-align: center; font-size: 0.8rem; color: var(--primary); display: flex; justify-content: space-between; align-items: center;">
                 <label>
                     <input type="checkbox" id="d6" checked> Use Notebook Context
@@ -459,19 +507,19 @@
         </div>
     </div>
     
-    <div id="live" class="tab-content" role="tabpanel">
+    <div id="live" class="tab-content" role="tabpanel" aria-labelledby="tb2" tabindex="0" hidden>
         <div class="card ui-customizable">
             <h2><i class="material-icons">record_voice_over</i> Live AI Tutor</h2>
             <p>Speak naturally with your AI tutor in real-time. Good for practice and quick questions.</p>
             <div style="text-align: center; margin: 2rem 0;">
                 <div id="e1" class="live-indicator"></div>
-                <span id="e2">Disconnected</span>
+                <span id="e2" role="status" aria-live="polite">Disconnected</span>
                 <div class="audio-visualizer" id="e3">
                     <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
                     <div class="audio-bar"></div><div class="audio-bar"></div>
                 </div>
                 <div style="margin-top: 2rem;">
-                    <button id="e4" onclick="m4()" class="btn-primary">
+                    <button id="e4" onclick="m4()" class="btn-primary" aria-pressed="false">
                         <i class="material-icons">power_settings_new</i> Start Session
                     </button>
                     <button id="e5" onclick="m5()" class="btn-secondary" disabled>
@@ -481,14 +529,14 @@
             </div>
             <div class="card" style="margin-top: 1rem; background: rgba(0,0,0,0.02);">
                 <h3><i class="material-icons">subtitles</i> Live Transcript</h3>
-                <div id="e6" style="min-height: 100px; max-height: 200px; overflow-y: auto; font-family: monospace; line-height: 1.5;">
+                <div id="e6" style="min-height: 100px; max-height: 200px; overflow-y: auto; font-family: monospace; line-height: 1.5;" role="log" aria-live="polite" aria-label="Live transcript">
                     <em style="color:#888;">Transcript will appear here...</em>
                 </div>
             </div>
         </div>
     </div>
     
-    <div id="notebook" class="tab-content" role="tabpanel">
+    <div id="notebook" class="tab-content" role="tabpanel" aria-labelledby="tb3" tabindex="0" hidden>
         <div class="card ui-customizable">
             <h2><i class="material-icons">book</i> Study Notebook</h2>
             <p>Paste your study notes, articles, or essays here. The AI will use this context to answer your questions.</p>
@@ -512,7 +560,7 @@
         </div>
     </div>
     
-    <div id="flashcards" class="tab-content" role="tabpanel">
+    <div id="flashcards" class="tab-content" role="tabpanel" aria-labelledby="tb4" tabindex="0" hidden>
         <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
             <div class="card ui-customizable">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
@@ -526,7 +574,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="flashcard" id="g3" onclick="m12()" tabindex="0" role="button" aria-label="Flashcard. Tap to flip.">
+                <div class="flashcard" id="g3" onclick="m12()" tabindex="0" role="button" aria-label="Flashcard question side. Press Enter or Space to flip." aria-pressed="false">
                     <div class="card-difficulty">
                         <button class="diff-btn diff-easy" onclick="event.stopPropagation(); m13('easy')" title="Mark as Easy">
                             <i class="material-icons" style="font-size: 14px;">thumb_up</i>
@@ -535,7 +583,7 @@
                             <i class="material-icons" style="font-size: 14px;">thumb_down</i>
                         </button>
                     </div>
-                    <div id="g4"></div>
+                    <div id="g4" role="status" aria-live="polite"></div>
                 </div>
                 <div class="controls" style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem;">
                     <button onclick="m14()" aria-label="Previous Card" title="Left Arrow">
@@ -573,7 +621,7 @@
                         <i class="material-icons">quiz</i> New Quiz
                     </button>
                 </div>
-                <div id="g6">
+                <div id="g6" role="region" aria-live="polite" aria-label="Quiz questions">
                     <p style="color:#666; text-align: center; padding: 2rem;">
                         Generate a quiz based on your Notebook content or a specific topic.
                     </p>
@@ -585,7 +633,7 @@
         </div>
     </div>
     
-    <div id="visualize" class="tab-content" role="tabpanel">
+    <div id="visualize" class="tab-content" role="tabpanel" aria-labelledby="tb5" tabindex="0" hidden>
         <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
             <div class="card ui-customizable">
                 <h2>Generate Diagrams</h2>
@@ -612,7 +660,7 @@
         </div>
     </div>
     
-    <div id="converter" class="tab-content" role="tabpanel">
+    <div id="converter" class="tab-content" role="tabpanel" aria-labelledby="tb6" tabindex="0" hidden>
         <div class="card ui-customizable">
             <h2>Text to Speech / Summary</h2>
             <p>Convert text to audio or get an AI summary. Use your voice with the microphone button.</p>
@@ -637,14 +685,14 @@
             </div>
             <div class="card" style="background: rgba(0,0,0,0.02);">
                 <h3><i class="material-icons">article</i> Summary Output</h3>
-                <div id="i2" style="min-height: 100px; line-height: 1.6;">
+                <div id="i2" style="min-height: 100px; line-height: 1.6;" role="status" aria-live="polite">
                     <em style="color:#888;">AI summary will appear here...</em>
                 </div>
             </div>
         </div>
     </div>
     
-    <div id="access" class="tab-content" role="tabpanel">
+    <div id="access" class="tab-content" role="tabpanel" aria-labelledby="tb7" tabindex="0" hidden>
         <div class="card ui-customizable">
             <h2><i class="material-icons">accessibility_new</i> Accessibility Tools</h2>
             <p>Customize your experience for better accessibility.</p>
@@ -696,10 +744,12 @@
         </div>
     </div>
     
-    <div id="modal1" class="modal" style="display:none;">
+    </main>
+
+    <div id="modal1" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="k9" aria-hidden="true" tabindex="-1">
         <div class="modal-content">
-            <span class="close" id="k1">&times;</span>
-            <h2>Settings</h2>
+            <span class="close" id="k1" role="button" tabindex="0" aria-label="Close settings">&times;</span>
+            <h2 id="k9">Settings</h2>
             <div class="form-group">
                 <label for="k2">Gemini API Key</label>
                 <input type="password" id="k2" placeholder="Enter your API key...">
@@ -736,12 +786,12 @@
         </div>
     </div>
     
-    <div id="modal2" class="modal" style="display:none;">
+    <div id="modal2" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="l6" aria-hidden="true" tabindex="-1">
         <div class="modal-content">
-            <span class="close" onclick="document.getElementById('modal2').style.display='none'">&times;</span>
-            <h2><i class="material-icons">timer</i> Pomodoro Timer</h2>
+            <span class="close" onclick="f24('modal2')" role="button" tabindex="0" aria-label="Close timer">&times;</span>
+            <h2 id="l6"><i class="material-icons">timer</i> Pomodoro Timer</h2>
             <p style="text-align: center; color: #666;">Focus for 25 minutes, then take a 5-minute break.</p>
-            <div class="timer-display" id="l1">25:00</div>
+            <div class="timer-display" id="l1" role="timer" aria-live="polite">25:00</div>
             <div class="timer-controls">
                 <button onclick="m27()" id="l2" class="btn-primary">
                     <i class="material-icons">play_arrow</i> Start
@@ -764,10 +814,10 @@
         </div>
     </div>
     
-    <div id="modal3" class="modal" style="display:none;">
+    <div id="modal3" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="m6" aria-hidden="true" tabindex="-1">
         <div class="modal-content" style="max-width: 800px;">
-            <span class="close" onclick="document.getElementById('modal3').style.display='none'">&times;</span>
-            <h2><i class="material-icons">bar_chart</i> Study Statistics</h2>
+            <span class="close" onclick="f24('modal3')" role="button" tabindex="0" aria-label="Close statistics">&times;</span>
+            <h2 id="m6"><i class="material-icons">bar_chart</i> Study Statistics</h2>
             <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 20px 0;">
                 <div class="stat-card">
                     <div class="stat-label">Total Study Time</div>
@@ -803,11 +853,11 @@
         </div>
     </div>
     
-    <div id="modal4" class="shortcuts-modal">
+    <div id="modal4" class="shortcuts-modal" role="dialog" aria-modal="true" aria-labelledby="n3" aria-hidden="true" tabindex="-1">
         <div class="shortcuts-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2><i class="material-icons">keyboard</i> Keyboard Shortcuts</h2>
-                <span class="close" onclick="document.getElementById('modal4').style.display='none'" style="cursor: pointer;">&times;</span>
+                <h2 id="n3"><i class="material-icons">keyboard</i> Keyboard Shortcuts</h2>
+                <span class="close" onclick="f24('modal4')" style="cursor: pointer;" role="button" tabindex="0" aria-label="Close shortcuts">&times;</span>
             </div>
             <div>
                 <h3>Navigation</h3>
@@ -906,6 +956,69 @@
         let v13 = null;
         let v14 = 25 * 60;
         let v15 = false;
+        let v146 = null;
+        let v147 = null;
+        let v148 = false;
+
+        function f21(v23) {
+            const v149 = document.getElementById('srLive');
+            if (!v149) return;
+            v149.textContent = '';
+            setTimeout(() => {
+                v149.textContent = v23;
+            }, 20);
+        }
+
+        function f22(v33) {
+            const v150 = v33.target;
+            return v150.tagName === 'INPUT' || v150.tagName === 'TEXTAREA' || v150.tagName === 'SELECT' || v150.isContentEditable;
+        }
+
+        function f25(v151) {
+            return v151.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        }
+
+        function f26(v33) {
+            if (v33.key !== 'Tab' || !v147) return;
+            const v152 = f25(v147);
+            if (!v152.length) return;
+            const v153 = v152[0];
+            const v154 = v152[v152.length - 1];
+            if (v33.shiftKey && document.activeElement === v153) {
+                v33.preventDefault();
+                v154.focus();
+                return;
+            }
+            if (!v33.shiftKey && document.activeElement === v154) {
+                v33.preventDefault();
+                v153.focus();
+            }
+        }
+
+        function f23(v155) {
+            const v151 = document.getElementById(v155);
+            if (!v151) return;
+            v146 = document.activeElement;
+            v147 = v151;
+            v151.style.display = 'block';
+            v151.setAttribute('aria-hidden', 'false');
+            const v152 = f25(v151);
+            if (v152.length) v152[0].focus();
+            else v151.focus();
+        }
+
+        function f24(v155) {
+            const v151 = document.getElementById(v155);
+            if (!v151) return;
+            v151.style.display = 'none';
+            v151.setAttribute('aria-hidden', 'true');
+            if (v147 && v147.id === v155) {
+                v147 = null;
+            }
+            if (v146 && typeof v146.focus === 'function') {
+                v146.focus();
+            }
+        }
         
         function f1() {
             const v16 = localStorage.getItem('study_stats');
@@ -964,6 +1077,7 @@
             const v24 = document.getElementById('n1');
             const v25 = document.createElement('div');
             v25.className = `toast ${v19}`;
+            v25.setAttribute('role', v19 === 'error' ? 'alert' : 'status');
             
             const v26 = {
                 'success': 'check_circle',
@@ -978,6 +1092,7 @@
             `;
             
             v24.appendChild(v25);
+            f21(v23);
             
             setTimeout(() => {
                 v25.style.animation = 'slideIn 0.3s ease reverse';
@@ -1026,17 +1141,20 @@
         }
         
         document.addEventListener('keydown', (v33) => {
+            if (v147) {
+                f26(v33);
+            }
+
             if (v33.key === 'Escape') {
-                document.querySelectorAll('.modal, .shortcuts-modal').forEach(v34 => {
-                    v34.style.display = 'none';
-                });
+                if (v147) {
+                    f24(v147.id);
+                }
                 return;
             }
             
             if (v33.key === '?' && !v33.ctrlKey && !v33.metaKey) {
-                if (document.activeElement.tagName !== 'INPUT' && 
-                    document.activeElement.tagName !== 'TEXTAREA') {
-                    document.getElementById('modal4').style.display = 'block';
+                if (!f22(v33)) {
+                    f23('modal4');
                     v33.preventDefault();
                 }
                 return;
@@ -1069,7 +1187,7 @@
                     case 't':
                     case 'T':
                         v33.preventDefault();
-                        document.getElementById('modal2').style.display = 'block';
+                        f23('modal2');
                         break;
                     case 's':
                     case 'S':
@@ -1084,7 +1202,7 @@
                 }
             }
             
-            const v36 = document.querySelector('.tab-content[style*="display: block"]');
+            const v36 = document.querySelector('.tab-content:not([hidden])');
             if (v36 && v36.id === 'flashcards') {
                 switch(v33.key) {
                     case 'ArrowRight':
@@ -1096,16 +1214,14 @@
                         m14();
                         break;
                     case ' ':
-                        if (document.activeElement.tagName !== 'INPUT' && 
-                            document.activeElement.tagName !== 'TEXTAREA') {
+                        if (!f22(v33)) {
                             v33.preventDefault();
                             m12();
                         }
                         break;
                     case 'r':
                     case 'R':
-                        if (document.activeElement.tagName !== 'INPUT' && 
-                            document.activeElement.tagName !== 'TEXTAREA') {
+                        if (!f22(v33)) {
                             v33.preventDefault();
                             m15();
                         }
@@ -1162,7 +1278,7 @@
         });
         
         function m32() {
-            document.getElementById('modal3').style.display = 'block';
+            f23('modal3');
             
             const v41 = Math.floor(v6.v7 / 3600);
             const v42 = Math.floor((v6.v7 % 3600) / 60);
@@ -1424,17 +1540,31 @@
         }
         
         function t1(v81, v82) {
-            const v35 = document.getElementsByClassName("tab-content");
-            for (let v67 = 0; v67 < v35.length; v67++) {
-                v35[v67].style.display = "none";
-            }
             const v83 = document.getElementsByClassName("tab-link");
             for (let v67 = 0; v67 < v83.length; v67++) {
-                v83[v67].className = v83[v67].className.replace(" active", "");
+                const v156 = v83[v67];
+                const v157 = v156.getAttribute('data-tab');
+                v156.classList.remove('active');
+                v156.setAttribute('aria-selected', 'false');
+                v156.setAttribute('tabindex', '-1');
+                const v158 = document.getElementById(v157);
+                if (v158) {
+                    v158.hidden = true;
+                    v158.style.display = 'none';
+                }
             }
-            document.getElementById(v82).style.display = "block";
-            if (v81) v81.currentTarget.className += " active";
-            else document.querySelector(`[onclick*="${v82}"]`)?.classList.add('active');
+            const v159 = document.getElementById(v82);
+            if (v159) {
+                v159.hidden = false;
+                v159.style.display = 'block';
+            }
+            const v160 = v81?.currentTarget || document.querySelector(`.tab-link[data-tab="${v82}"]`);
+            if (v160) {
+                v160.classList.add('active');
+                v160.setAttribute('aria-selected', 'true');
+                v160.setAttribute('tabindex', '0');
+            }
+            f21((v160?.textContent || '').trim() + ' tab opened');
         }
         
         async function f13(v84, v85 = "") {
@@ -1475,8 +1605,10 @@
             const v89 = document.getElementById('d3');
             if (v4) {
                 v89.style.background = 'var(--error)';
+                v89.setAttribute('aria-pressed', 'true');
             } else {
                 v89.style.background = '';
+                v89.setAttribute('aria-pressed', 'false');
             }
         }
         
@@ -1530,13 +1662,16 @@
                     v96.textContent = "Connected (Listening...)";
                     v89.innerHTML = '<i class="material-icons">stop</i> End Session';
                     v89.classList.replace('btn-primary', 'btn-error');
+                    v89.setAttribute('aria-pressed', 'true');
                     v97.classList.add('active');
                 } else {
                     v96.textContent = "Disconnected";
                     v89.innerHTML = '<i class="material-icons">power_settings_new</i> Start Session';
                     v89.classList.replace('btn-error', 'btn-primary');
+                    v89.setAttribute('aria-pressed', 'false');
                     v97.classList.remove('active');
                 }
+                f21(v96.textContent);
             }
             f17() {
                 this.v94 = false;
@@ -1691,6 +1826,8 @@
             const v76 = v59[v69];
             v119.style.transform = 'rotateY(0deg)'; 
             v119.classList.remove('flipped');
+            v119.setAttribute('aria-pressed', 'false');
+            v119.setAttribute('aria-label', `Flashcard question side. Card ${v69 + 1} of ${v59.length}. Press Enter or Space to flip.`);
             v101 = false;
             v53.innerHTML = `
                 <h3 style="color:var(--primary); margin-bottom:1rem;">Card ${v69 + 1}/${v59.length}</h3>
@@ -1707,14 +1844,18 @@
             v101 = !v101;
             if (v101) {
                 v119.classList.add('flipped');
+                v119.setAttribute('aria-pressed', 'true');
+                v119.setAttribute('aria-label', `Flashcard answer side. Card ${v69 + 1} of ${v59.length}. Press Enter or Space to flip back.`);
                 v53.innerHTML = `
                     <h3 style="color:var(--success); margin-bottom:1rem;">Answer</h3>
                     <div style="font-size:1.4rem;">${v76.a}</div>
                     <div style="margin-top:2rem; color:#888; font-size:0.9rem;">(Tap for Question)</div>
                 `;
                 f5();
+                f21(`Flashcard ${v69 + 1} answer shown`);
             } else {
                 f12();
+                f21(`Flashcard ${v69 + 1} question shown`);
             }
             f19();
         }
@@ -1800,11 +1941,13 @@
             v3.onstart = () => { 
                 v4 = true; 
                 f19();
+                document.getElementById('d3').setAttribute('aria-pressed', 'true');
                 f7('Listening...', 'info');
             };
             v3.onend = () => { 
                 v4 = false; 
                 f19();
+                document.getElementById('d3').setAttribute('aria-pressed', 'false');
             };
             v3.onresult = (v63) => {
                 const v127 = v63.results[0][0].transcript;
@@ -1849,12 +1992,15 @@
             v27 = document.getElementById('k7').checked;
             localStorage.setItem('study_autosave', v27);
             
-            document.getElementById('modal1').style.display = 'none';
+            f24('modal1');
             f7('Settings saved!', 'success');
         }
         
         window.addEventListener('load', () => {
             f1();
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.body.classList.add('reduced-motion');
+            }
             
             const v130 = localStorage.getItem('study_skills_api_key');
             if (v130) {
@@ -1883,19 +2029,20 @@
             document.getElementById('k7').checked = v27;
             
             f12();
+            t1(null, 'tutor');
             
             document.getElementById('k8').addEventListener('click', m36);
             
             document.getElementById('b5').addEventListener('click', () => {
-                document.getElementById('modal1').style.display = 'block';
+                f23('modal1');
             });
             
             document.getElementById('k1').addEventListener('click', () => {
-                document.getElementById('modal1').style.display = 'none';
+                f24('modal1');
             });
             
             document.getElementById('b1').addEventListener('click', () => {
-                document.getElementById('modal2').style.display = 'block';
+                f23('modal2');
             });
             
             document.getElementById('b2').addEventListener('click', m32);
@@ -1903,8 +2050,62 @@
             document.getElementById('b3').addEventListener('click', m33);
             
             document.getElementById('b4').addEventListener('click', () => {
-                document.getElementById('modal4').style.display = 'block';
+                f23('modal4');
             });
+
+            document.querySelectorAll('.close[role="button"]').forEach(v161 => {
+                v161.addEventListener('keydown', (v33) => {
+                    if (v33.key === 'Enter' || v33.key === ' ') {
+                        v33.preventDefault();
+                        v161.click();
+                    }
+                });
+            });
+
+            const v162 = document.querySelector('[role="tablist"]');
+            if (v162) {
+                v162.addEventListener('keydown', (v33) => {
+                    const v163 = Array.from(v162.querySelectorAll('[role="tab"]'));
+                    const v164 = v163.indexOf(document.activeElement);
+                    if (v164 === -1) return;
+                    let v165 = v164;
+                    if (v33.key === 'ArrowRight') v165 = (v164 + 1) % v163.length;
+                    else if (v33.key === 'ArrowLeft') v165 = (v164 - 1 + v163.length) % v163.length;
+                    else if (v33.key === 'Home') v165 = 0;
+                    else if (v33.key === 'End') v165 = v163.length - 1;
+                    else return;
+                    v33.preventDefault();
+                    const v166 = v163[v165];
+                    t1({ currentTarget: v166 }, v166.getAttribute('data-tab'));
+                    v166.focus();
+                });
+            }
+
+            document.querySelectorAll('i.material-icons').forEach(v167 => {
+                v167.setAttribute('aria-hidden', 'true');
+            });
+
+            document.querySelectorAll('.tab-content').forEach(v168 => {
+                v168.setAttribute('aria-busy', 'false');
+            });
+
+            document.querySelectorAll('.modal, .shortcuts-modal').forEach(v169 => {
+                v169.addEventListener('mousedown', (v33) => {
+                    if (v33.target === v169) {
+                        f24(v169.id);
+                    }
+                });
+            });
+
+            const v170 = document.getElementById('g3');
+            if (v170) {
+                v170.addEventListener('keydown', (v33) => {
+                    if (v33.key === 'Enter' || v33.key === ' ') {
+                        v33.preventDefault();
+                        m12();
+                    }
+                });
+            }
             
             const v136 = document.getElementById('j1');
             if (v136) {
@@ -1922,44 +2123,63 @@
             
             const v138 = document.getElementById('j3');
             if (v138) {
+                v138.checked = localStorage.getItem('study_spacing') === 'true';
+                document.body.style.letterSpacing = v138.checked ? '0.05em' : '';
+                document.body.style.wordSpacing = v138.checked ? '0.1em' : '';
                 v138.addEventListener('change', (v63) => {
                     document.body.style.letterSpacing = v63.target.checked ? '0.05em' : '';
                     document.body.style.wordSpacing = v63.target.checked ? '0.1em' : '';
+                    localStorage.setItem('study_spacing', v63.target.checked);
                 });
             }
             
             const v139 = document.getElementById('j4');
             if (v139) {
+                v139.checked = localStorage.getItem('study_dys') === 'true';
+                document.body.classList.toggle('dyslexia-font', v139.checked);
                 v139.addEventListener('change', (v63) => {
                     document.body.classList.toggle('dyslexia-font', v63.target.checked);
+                    localStorage.setItem('study_dys', v63.target.checked);
                 });
             }
             
             const v140 = document.getElementById('j5');
             if (v140) {
+                const v171 = localStorage.getItem('study_rm') === 'true';
+                v140.checked = v171 || document.body.classList.contains('reduced-motion');
+                if (v140.checked) document.body.classList.add('reduced-motion');
                 v140.addEventListener('change', (v63) => {
                     document.body.classList.toggle('reduced-motion', v63.target.checked);
+                    localStorage.setItem('study_rm', v63.target.checked);
                 });
             }
             
             const v141 = document.getElementById('j6');
             if (v141) {
+                v141.checked = localStorage.getItem('study_focus') === 'true';
+                document.body.classList.toggle('show-focus-outlines', v141.checked);
                 v141.addEventListener('change', (v63) => {
                     document.body.classList.toggle('show-focus-outlines', v63.target.checked);
+                    localStorage.setItem('study_focus', v63.target.checked);
                 });
             }
             
             const v142 = document.getElementById('j7');
             if (v142) {
+                v142.checked = localStorage.getItem('study_inv') === 'true';
+                document.body.classList.toggle('invert-colors', v142.checked);
                 v142.addEventListener('change', (v63) => {
                     document.body.classList.toggle('invert-colors', v63.target.checked);
+                    localStorage.setItem('study_inv', v63.target.checked);
                 });
             }
             
             const v143 = document.getElementById('j8');
             if (v143) {
+                v143.checked = localStorage.getItem('study_sr') === 'true';
                 v143.addEventListener('change', (v63) => {
                     localStorage.setItem('study_sr', v63.target.checked);
+                    f21(v63.target.checked ? 'Screen reader enhancements on' : 'Screen reader enhancements off');
                 });
             }
             
@@ -1981,7 +2201,7 @@
         
         function m26() {
             const v144 = document.querySelector('.tab-link.active');
-            const v145 = document.querySelector('.tab-content[style*="display: block"]');
+            const v145 = document.querySelector('.tab-content:not([hidden])');
             const v23 = (v144?.textContent || '') + ". " + (v145?.innerText || '').substring(0,800);
             f20(v23);
         }
